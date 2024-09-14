@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true
+    },
+    "paths": {
+        "@car-pooling/common/*": [
+            "src/common/*/index.ts"
+        ]
+    }
+}
