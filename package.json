@@ -1,6 +1,6 @@
 {
   "name": "car-pooling-challenge",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Technical challenge for Cabify",
   "main": "index.js",
   "scripts": {
