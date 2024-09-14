@@ -6,6 +6,7 @@
   "scripts": {
     "test": "test",
     "lint": "eslint '*/**/*.{js.ts}' --no-error-on-unmatched-pattern",
+    "debug": "nodemon --inspect ./build/src/index.js",
     "start": "webpack",
     "run-dev": "nodemon ./build/src/index.js"
   },
@@ -21,6 +22,8 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "firebase": "^10.13.1",
+    "tslog": "^4.9.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0",
@@ -29,6 +32,7 @@
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.21",
+    "@types/firebase": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^8.5.0",
     "@typescript-eslint/parser": "^8.5.0",
     "eslint": "^8.57.0",

@@ -5,11 +5,20 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "paths": {
+            "@models": [
+                "./src/models"
+            ],
+            "@constants": [
+                "./src/constants"
+            ],
+            "@model/error": [
+                "./src/util/validation-error.ts"
+            ],
+            "@firebase/db": [
+                "./src/repository/index.ts"
+            ]
+        }
     },
-    "paths": {
-        "@car-pooling/common/*": [
-            "src/common/*/index.ts"
-        ]
-    }
 }
