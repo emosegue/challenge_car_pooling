@@ -1,3 +1,4 @@
+# ignored path or files
 node_modules
 .vscode
 build
