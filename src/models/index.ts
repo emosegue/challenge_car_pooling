@@ -1,3 +1,4 @@
 import { CarData } from './car';
+import { GroupData } from './group';
 
-export { CarData };
+export { CarData, GroupData };

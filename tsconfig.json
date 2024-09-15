@@ -7,6 +7,9 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "paths": {
+            "@controllers": [
+                "./src/controller"
+            ],
             "@models": [
                 "./src/models"
             ],

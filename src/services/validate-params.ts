@@ -14,7 +14,7 @@ export function validateHeaders(req: Request, headersToValidate: Record<string, 
     }
 }
 
-export function validateBody<T>(body: any, schema: T) {
+export function validateBody<T>(body: any, schema: T, validateArray: boolean) {
     const logger = LoggerSingleton.getInstance();
 
     if (!Object.values(body).length) {
@@ -34,6 +34,10 @@ export function validateBody<T>(body: any, schema: T) {
             }
         }
     };
+
+    if (!validateArray && Array.isArray(body)) {
+        throw new ValidationError('Error validate input data, body cannot be an array')
+    }
 
     if (Array.isArray(body)) {
         body.forEach((item, index) => {

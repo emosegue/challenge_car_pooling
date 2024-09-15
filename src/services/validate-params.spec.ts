@@ -2,7 +2,7 @@ import { validateHeaders, validateBody } from './validate-params';
 import { Request } from 'express';
 import { ValidationError } from '@model/error';
 import LoggerSingleton from '../util/logger';
-import { CarData } from '@models';
+import { CarData, GroupData } from '@models';
 
 jest.mock('../util/logger');
 
@@ -63,7 +63,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema)).not.toThrow();
+        expect(() => validateBody(body, schema, true)).not.toThrow();
     });
 
     it('should throw ValidationError if body is empty', () => {
@@ -74,7 +74,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema)).toThrow(ValidationError);
+        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
     });
 
     it('should throw ValidationError if a required property is missing', () => {
@@ -94,7 +94,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema)).toThrow(ValidationError);
+        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
         expect(logger.error).toHaveBeenCalledWith('Property "elem[1].seats" not available');
     });
 
@@ -115,7 +115,27 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema)).toThrow(ValidationError);
+        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
         expect(logger.error).toHaveBeenCalledWith('Property "elem[1].seats" must be "number", but is "string".');
+    });
+
+    it('should throw ValidationError if validateArray is false but the body is an array', () => {
+        const body = [
+            {
+                id: 1,
+                people: 4,
+            },
+            {
+                id: 2,
+                people: 6,
+            }
+        ];
+
+        const schema: GroupData = {
+            id: 2,
+            people: 0,
+        };
+
+        expect(() => validateBody(body, schema, false)).toThrow(ValidationError);
     });
 });
