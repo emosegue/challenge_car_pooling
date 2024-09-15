@@ -37,7 +37,7 @@ export function validateBody<T>(body: any, schema: T) {
 
     if (Array.isArray(body)) {
         body.forEach((item, index) => {
-            validateObject(item, schema, `elemento[${index}]`);
+            validateObject(item, schema, `elem[${index}]`);
         });
     } else {
         validateObject(body, schema);
