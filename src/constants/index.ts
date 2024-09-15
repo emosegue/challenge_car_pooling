@@ -8,7 +8,8 @@ const HTTP_STATUS_CODE = {
 
 const DB_COLLECTION = {
     CARS: 'cars',
-    JOURNEY: 'journey'
+    JOURNEY: 'journey',
+    GROUPS: 'groups'
 }
 
 export { HTTP_STATUS_CODE, DB_COLLECTION };

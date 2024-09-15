@@ -1,3 +1,3 @@
-import { emptyCollection, insertBulkItems } from './writeData';
+import { emptyCollection, insertBulkItems, getItemById, getItemByField, insertItem } from './database';
 
-export { emptyCollection, insertBulkItems };
+export { emptyCollection, insertBulkItems, getItemById, getItemByField, insertItem };

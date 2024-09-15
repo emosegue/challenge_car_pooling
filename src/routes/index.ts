@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { CarController, JourneyController } from '@controllers';
+import { CarController, JourneyController, LocationController } from '@controllers';
 import { HTTP_STATUS_CODE } from '@constants';
 
 const router = Router();
@@ -11,13 +11,8 @@ router.get('/status', (_req: Request, res: Response) => {
 
 router.put('/cars', CarController);
 router.post('/journey', JourneyController);
-
-router.post('/locate', (_req: Request, res: Response) => {
-    res.status(200)
-    res.send()
-});
-
-router.post('/locate', (_req: Request, res: Response) => {
+router.post('/locate', LocationController);
+router.post('/dropoff', (_req: Request, res: Response) => {
     res.status(200)
     res.send()
 });
