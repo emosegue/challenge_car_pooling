@@ -3,3 +3,4 @@
     * initial scaffolding [#1] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/1)
     * changelog update [#2] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/2)
     * unit tests added [#3] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/3)
+    * scaffolding improvements [#4] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/4)
