@@ -1,10 +1,9 @@
-import { validateHeaders, validateBody } from './validate-params';
+import { ValidationService, LoggerService } from '@services';
 import { Request } from 'express';
 import { ValidationError } from '@model/error';
-import LoggerSingleton from '../util/logger';
 import { CarData, GroupData } from '@models';
 
-jest.mock('../util/logger');
+jest.mock('../../src/domain/services/loggerService');
 
 describe('validateHeaders', () => {
     it('should validate headers successfully', () => {
@@ -18,7 +17,7 @@ describe('validateHeaders', () => {
             'Content-Type': 'application/json',
         };
 
-        expect(() => validateHeaders(req, headersToValidate)).not.toThrow();
+        expect(() => ValidationService.validateHeaders(req, headersToValidate)).not.toThrow();
     });
 
     it('should throw ValidationError if header does not match', () => {
@@ -33,7 +32,7 @@ describe('validateHeaders', () => {
         };
 
 
-        expect(() => validateHeaders(req, headersToValidate)).toThrow(ValidationError);
+        expect(() => ValidationService.validateHeaders(req, headersToValidate)).toThrow(ValidationError);
     });
 });
 
@@ -43,7 +42,7 @@ describe('validateBody', () => {
     };
 
     beforeAll(() => {
-        (LoggerSingleton.getInstance as jest.Mock).mockReturnValue(logger);
+        (LoggerService.getInstance as jest.Mock).mockReturnValue(logger);
     });
 
     it('should validate body successfully with correct schema', () => {
@@ -63,7 +62,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema, true)).not.toThrow();
+        expect(() => ValidationService.validateBody(body, schema, true)).not.toThrow();
     });
 
     it('should throw ValidationError if body is empty', () => {
@@ -74,7 +73,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
+        expect(() => ValidationService.validateBody(body, schema, true)).toThrow(ValidationError);
     });
 
     it('should throw ValidationError if a required property is missing', () => {
@@ -94,7 +93,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
+        expect(() => ValidationService.validateBody(body, schema, true)).toThrow(ValidationError);
         expect(logger.error).toHaveBeenCalledWith('Property "elem[1].seats" not available');
     });
 
@@ -115,7 +114,7 @@ describe('validateBody', () => {
             seats: 0,
         };
 
-        expect(() => validateBody(body, schema, true)).toThrow(ValidationError);
+        expect(() => ValidationService.validateBody(body, schema, true)).toThrow(ValidationError);
         expect(logger.error).toHaveBeenCalledWith('Property "elem[1].seats" must be "number", but is "string".');
     });
 
@@ -136,6 +135,6 @@ describe('validateBody', () => {
             people: 0,
         };
 
-        expect(() => validateBody(body, schema, false)).toThrow(ValidationError);
+        expect(() => ValidationService.validateBody(body, schema, false)).toThrow(ValidationError);
     });
 });

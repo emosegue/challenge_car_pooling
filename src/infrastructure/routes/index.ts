@@ -17,5 +17,4 @@ router.post('/dropoff', (_req: Request, res: Response) => {
     res.send()
 });
 
-
 export default router;

@@ -8,10 +8,16 @@
         "sourceMap": true,
         "paths": {
             "@controllers": [
-                "./src/controller"
+                "./src/infrastructure/controllers/index.ts"
             ],
             "@models": [
-                "./src/models"
+                "./src/domain/models"
+            ],
+            "@services": [
+                "./src/domain/services"
+            ],
+            "@middlewares": [
+                "./src/infrastructure/middlewares/index.ts"
             ],
             "@constants": [
                 "./src/constants"
@@ -19,8 +25,8 @@
             "@model/error": [
                 "./src/util/validation-error.ts"
             ],
-            "@firebase/db": [
-                "./src/repository/index.ts"
+            "@firebase/config": [
+                "./src/infrastructure/config/firebaseConfig.ts"
             ]
         }
     },

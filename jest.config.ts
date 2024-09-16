@@ -14,7 +14,9 @@ module.exports = {
     coverageDirectory: 'coverage',
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
     moduleNameMapper: {
-        '^@models/(.*)$': '<rootDir>/src/models/$1',
+        '^@controllers/(.*)$': '<rootDir>/src/controller/$1',
+        '^@models/(.*)$': '<rootDir>/src/domain/models/$1',
+        '^@services$': '<rootDir>/src/domain/services/index.ts',
         '^@constants/(.*)$': '<rootDir>/src/constants/$1',
         '^@model/error$': '<rootDir>/src/util/validation-error.ts',
         '^@firebase/db$': '<rootDir>/src/repository/index.ts',

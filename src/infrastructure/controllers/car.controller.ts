@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateHeaders, validateBody } from '../services/validate-params';
 import { CarData } from '@models';
 import { HTTP_STATUS_CODE, DB_COLLECTION } from '@constants';
 import { emptyCollection, insertBulkItems } from '@firebase/db';
+import { ValidationService } from '@services';
 
 export async function CarController(req: Request, res: Response, next: NextFunction) {
     const carSchema: CarData = { id: 1, seats: 2 };
     try {
-        validateHeaders(req, { 'content-type': 'application/json' })
-        validateBody(req?.body ?? {}, carSchema, true);
+        ValidationService.validateHeaders(req, { 'content-type': 'application/json' })
+        ValidationService.validateBody(req?.body ?? {}, carSchema, true);
 
         const carsData: CarData[] = req.body;
 
