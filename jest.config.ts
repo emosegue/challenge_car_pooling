@@ -18,7 +18,7 @@ module.exports = {
         '^@models/(.*)$': '<rootDir>/src/domain/models/$1',
         '^@services$': '<rootDir>/src/domain/services/index.ts',
         '^@constants/(.*)$': '<rootDir>/src/constants/$1',
-        '^@model/error$': '<rootDir>/src/util/validation-error.ts',
+        '^@exceptions$': '<rootDir>/src/domain/exceptions/index.ts',
         '^@firebase/db$': '<rootDir>/src/repository/index.ts',
     },
 };

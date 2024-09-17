@@ -1,120 +1,133 @@
 import { firestore, auth } from '@firebase/config';
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, limit } from 'firebase/firestore';
 import { User, onAuthStateChanged } from 'firebase/auth';
+import { JourneyRepository } from '../../domain/repositories/journeyRepository';
 
-export async function getItemById<T>(id: string, collectionName: string): Promise<T | null> {
-    try {
-        const docRef = doc(firestore, collectionName, id);
-        const docSnap = await getDoc(docRef);
+export class FirebaseJourneyRepository implements JourneyRepository {
 
-        if (docSnap.exists()) {
-            return docSnap.data() as T;
-        } else {
-            return null;
+    async testConnection(collectionName: string): Promise<void> {
+        try {
+            const q = query(collection(firestore, collectionName), limit(1));
+            await getDocs(q);
+        } catch (error) {
+            throw new Error('Database connection failed');
         }
-    } catch (error) {
-        console.error('Error fetching document:', error);
-        throw error;
     }
-}
 
-export async function getItemByField<T>(field: string, value: any, collectionName: string): Promise<T | null> {
-    try {
-        const q = query(collection(firestore, collectionName), where(field, '==', value));
-        const querySnapshot = await getDocs(q);
+    async getItemById<T>(id: string, collectionName: string): Promise<T | null> {
+        try {
+            const docRef = doc(firestore, collectionName, id);
+            const docSnap = await getDoc(docRef);
 
-        if (!querySnapshot.empty) {
-            const docSnap = querySnapshot.docs[0];
-            return docSnap.data() as T;
-        } else {
-            return null;
+            if (docSnap.exists()) {
+                return docSnap.data() as T;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching document:', error);
+            throw error;
         }
-    } catch (error) {
-        console.error('Error fetching document:', error);
-        throw error;
     }
-}
 
-export async function removeItemById(collectionName: string, itemId: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        onAuthStateChanged(auth, async (user: User | null) => {
-            if (user) {
-                try {
-                    const docRef = doc(firestore, collectionName, itemId);
-                    await deleteDoc(docRef);
-                    resolve();
-                } catch (error) {
-                    reject(error);
-                }
+    async getItemByField<T>(field: string, value: any, collectionName: string): Promise<T | null> {
+        try {
+            const q = query(collection(firestore, collectionName), where(field, '==', value));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const docSnap = querySnapshot.docs[0];
+                return docSnap.data() as T;
             } else {
-                reject(new Error('Not authenticated user'));
+                return null;
             }
-        });
-    });
-}
+        } catch (error) {
+            console.error('Error fetching document:', error);
+            throw error;
+        }
+    }
 
-export async function removeAllItems(collectionName: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        onAuthStateChanged(auth, async (user: User | null) => {
-            if (user) {
-                try {
-                    const collectionRef = collection(firestore, collectionName);
-                    const snapshot = await getDocs(collectionRef);
+    async removeItemByField(field: string, value: any, collectionName: string): Promise<void> {
+        try {
+            const q = query(collection(firestore, collectionName), where(field, '==', value));
+            const querySnapshot = await getDocs(q);
 
-                    const deletePromises = snapshot.docs.map((docSnapshot) =>
-                        deleteDoc(doc(firestore, collectionName, docSnapshot.id))
-                    );
-
-                    await Promise.all(deletePromises);
-                    resolve();
-                } catch (error) {
-                    reject(error);
-                }
+            if (!querySnapshot.empty) {
+                const deletePromises = querySnapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
+                await Promise.all(deletePromises);
             } else {
-                reject(new Error('Not authenticated user'));
+                console.log(`No items found with ${field} = ${value}`);
             }
-        });
-    });
-}
+        } catch (error) {
+            console.error('Error removing document:', error);
+            throw error;
+        }
+    }
 
-export async function insertBulkItems<T>(items: T[], collectionName: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        onAuthStateChanged(auth, async (user: User | null) => {
-            if (user) {
-                try {
-                    const collectionRef = collection(firestore, collectionName);
-                    const insertPromises = items.map(item =>
-                        addDoc(collectionRef, item)
-                    );
+    async removeAllItems(collectionName: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            onAuthStateChanged(auth, async (user: User | null) => {
+                if (user) {
+                    try {
+                        const collectionRef = collection(firestore, collectionName);
+                        const snapshot = await getDocs(collectionRef);
 
-                    await Promise.all(insertPromises);
+                        const deletePromises = snapshot.docs.map((docSnapshot) =>
+                            deleteDoc(doc(firestore, collectionName, docSnapshot.id))
+                        );
 
-                    resolve();
-                } catch (error) {
-                    reject(error);
+                        await Promise.all(deletePromises);
+                        resolve();
+                    } catch (error) {
+                        reject(error);
+                    }
+                } else {
+                    reject(new Error('Not authenticated user'));
                 }
-            } else {
-                reject(new Error('Not authenticated user'));
-            }
+            });
         });
-    });
-}
+    }
 
-export async function insertItem<T>(data: T, collectionName: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        onAuthStateChanged(auth, async (user: User | null) => {
-            if (user) {
-                try {
-                    await addDoc(collection(firestore, collectionName), data);
-                    console.log('Item successfully added');
-                    resolve();
-                } catch (error) {
-                    console.error('Error on adding item:', error);
-                    reject(error);
+    async insertBulkItems<T>(items: T[], collectionName: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            onAuthStateChanged(auth, async (user: User | null) => {
+                if (user) {
+                    try {
+                        const collectionRef = collection(firestore, collectionName);
+                        const insertPromises = items.map(item =>
+                            addDoc(collectionRef, item)
+                        );
+
+                        await Promise.all(insertPromises);
+
+                        resolve();
+                    } catch (error) {
+                        reject(error);
+                    }
+                } else {
+                    reject(new Error('Not authenticated user'));
                 }
-            } else {
-                reject(new Error('Not authenticated user'));
-            }
+            });
         });
-    });
+    }
+
+    async insertItem<T>(data: T, collectionName: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            onAuthStateChanged(auth, async (user: User | null) => {
+                if (user) {
+                    try {
+                        await addDoc(collection(firestore, collectionName), data);
+                        console.log('Item successfully added');
+                        resolve();
+                    } catch (error) {
+                        console.error('Error on adding item:', error);
+                        reject(error);
+                    }
+                } else {
+                    reject(new Error('Not authenticated user'));
+                }
+            });
+        });
+    }
+
 }

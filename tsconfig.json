@@ -13,8 +13,14 @@
             "@models": [
                 "./src/domain/models"
             ],
+            "@exceptions": [
+                "./src/domain/exceptions/index.ts"
+            ],
             "@services": [
                 "./src/domain/services"
+            ],
+            "@use-cases": [
+                "./src/application/use_cases"
             ],
             "@middlewares": [
                 "./src/infrastructure/middlewares/index.ts"
@@ -27,6 +33,9 @@
             ],
             "@firebase/config": [
                 "./src/infrastructure/config/firebaseConfig.ts"
+            ],
+            "@firebase/repository": [
+                "./src/infrastructure/db/firebaseJourneyRepository.ts"
             ]
         }
     },

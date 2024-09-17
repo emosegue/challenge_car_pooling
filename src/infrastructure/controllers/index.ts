@@ -1,6 +1,5 @@
 import { CarController } from './car.controller';
 import { JourneyController } from './journey.controller';
-import { LocationController } from './location.controller';
-import { DropoffController } from './dropoff.controller';
+import { StatusController } from './status.controller';
 
-export { CarController, JourneyController, LocationController, DropoffController }
+export { StatusController, CarController, JourneyController }

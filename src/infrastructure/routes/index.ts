@@ -1,20 +1,12 @@
 import { Router, Request, Response } from 'express';
-import { CarController, JourneyController, LocationController } from '@controllers';
-import { HTTP_STATUS_CODE } from '@constants';
+import { CarController, JourneyController, StatusController } from '@controllers';
 
 const router = Router();
 
-router.get('/status', (_req: Request, res: Response) => {
-    res.status(HTTP_STATUS_CODE.OK)
-    res.send()
-});
-
-router.put('/cars', CarController);
-router.post('/journey', JourneyController);
-router.post('/locate', LocationController);
-router.post('/dropoff', (_req: Request, res: Response) => {
-    res.status(200)
-    res.send()
-});
+router.get('/status', (req, res, next) => { new StatusController().checkStatus(req, res, next) });
+router.put('/cars', (req, res, next) => { new CarController().process(req, res, next) });
+router.post('/journey', (req, res, next) => { new JourneyController().addJourney(req, res, next) });
+router.post('/locate', (req, res, next) => { new JourneyController().getLocation(req, res, next) });
+router.post('/dropoff', (req, res, next) => { new JourneyController().dropOff(req, res, next) });
 
 export default router;

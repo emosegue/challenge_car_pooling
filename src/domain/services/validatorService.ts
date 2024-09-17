@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { LoggerService } from '@services';
-import { ValidationError } from '@model/error';
+import { ValidationError } from '@exceptions';
 
 export class ValidationService {
     static validateHeaders(req: Request, headersToValidate: Record<string, string>) {
@@ -10,6 +10,27 @@ export class ValidationService {
             if (headersToValidate.hasOwnProperty(key)) {
                 if (headers[key] !== headersToValidate[key]) {
                     throw new ValidationError(`Unexpected header value ${headers[key]}`);
+                }
+            }
+        }
+    }
+
+    static validateMultipleHeaders(req: Request, headersToValidate: Record<string, string[]>) {
+        const headers = req?.headers;
+
+        for (const key in headersToValidate) {
+            if (headersToValidate.hasOwnProperty(key)) {
+                const expectedValues = headersToValidate[key];
+                const actualValue = headers[key];
+
+                if (Array.isArray(actualValue)) {
+                    if (!actualValue.some(value => expectedValues.includes(value))) {
+                        throw new ValidationError(`Unexpected header value ${actualValue}`);
+                    }
+                } else {
+                    if (!expectedValues.includes(actualValue as string)) {
+                        throw new ValidationError(`Unexpected header value ${actualValue}`);
+                    }
                 }
             }
         }

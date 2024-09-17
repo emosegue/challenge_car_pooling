@@ -1,6 +1,6 @@
 import { ValidationService, LoggerService } from '@services';
 import { Request } from 'express';
-import { ValidationError } from '@model/error';
+import { ValidationError } from '@exceptions';
 import { CarData, GroupData } from '@models';
 
 jest.mock('../../src/domain/services/loggerService');
@@ -18,6 +18,34 @@ describe('validateHeaders', () => {
         };
 
         expect(() => ValidationService.validateHeaders(req, headersToValidate)).not.toThrow();
+    });
+
+    it('should validate multiple headers successfully', () => {
+        const req = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        } as unknown as Request;
+
+        const headersToValidate = {
+            'Content-Type': ['application/json', 'application/x-www-form-urlencoded'],
+        };
+
+        expect(() => ValidationService.validateMultipleHeaders(req, headersToValidate)).not.toThrow();
+    });
+
+    it('should validate multiple headers if one header does not match', () => {
+        const req = {
+            headers: {
+                'Content-Type': 'unexpected/header'
+            }
+        } as unknown as Request;
+
+        const headersToValidate = {
+            'Content-Type': ['application/json', 'application/x-www-form-urlencoded'],
+        };
+
+        expect(() => ValidationService.validateMultipleHeaders(req, headersToValidate)).toThrow(ValidationError);
     });
 
     it('should throw ValidationError if header does not match', () => {
