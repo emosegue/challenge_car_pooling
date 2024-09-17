@@ -14,6 +14,7 @@ import { HTTP_STATUS_CODE } from '@constants';
 import { GroupDto, CarDto } from '@dtos';
 
 export class JourneyController {
+    private journeyRepository: FirebaseJourneyRepository
     private getGroupByGroupId: GetGroupByGroupIdUseCase;
     private getJourneyByCarId: GetJourneyCarByGroupIdUseCase;
     private addGroup: AddGroupUseCase;
@@ -22,14 +23,14 @@ export class JourneyController {
 
     private createOrUpdateJourneys: CreateOrUpdateJourneysUseCase;
 
-    constructor() {
-        const journeyRepository = new FirebaseJourneyRepository();
-        this.getGroupByGroupId = new GetGroupByGroupIdUseCase(journeyRepository);
-        this.getJourneyByCarId = new GetJourneyCarByGroupIdUseCase(journeyRepository);
-        this.removeJourneyByGroupId = new DropOffJourneyUseCase(journeyRepository);
-        this.addGroup = new AddGroupUseCase(journeyRepository);
-        this.getCarById = new GetCarUseCase(journeyRepository);
-        this.createOrUpdateJourneys = new CreateOrUpdateJourneysUseCase(journeyRepository);
+    constructor(journeyRepository: FirebaseJourneyRepository) {
+        this.journeyRepository = journeyRepository;
+        this.getGroupByGroupId = new GetGroupByGroupIdUseCase(this.journeyRepository);
+        this.getJourneyByCarId = new GetJourneyCarByGroupIdUseCase(this.journeyRepository);
+        this.removeJourneyByGroupId = new DropOffJourneyUseCase(this.journeyRepository);
+        this.addGroup = new AddGroupUseCase(this.journeyRepository);
+        this.getCarById = new GetCarUseCase(this.journeyRepository);
+        this.createOrUpdateJourneys = new CreateOrUpdateJourneysUseCase(this.journeyRepository);
     }
 
     async addJourney(req: Request, res: Response, next: NextFunction) {

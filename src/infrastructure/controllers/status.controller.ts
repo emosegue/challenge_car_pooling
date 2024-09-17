@@ -5,8 +5,8 @@ import { DB_COLLECTION, HTTP_STATUS_CODE } from '@constants';
 export class StatusController {
     private journeyRepository: FirebaseJourneyRepository;
 
-    constructor() {
-        this.journeyRepository = new FirebaseJourneyRepository();
+    constructor(journeyRepository: FirebaseJourneyRepository) {
+        this.journeyRepository = journeyRepository;
     }
 
     /*
@@ -14,7 +14,7 @@ export class StatusController {
     */
     async checkStatus(_req: Request, res: Response, next: NextFunction) {
         try {
-            await this.journeyRepository.testConnection(DB_COLLECTION.CARS);
+            const response = await this.journeyRepository.testConnection(DB_COLLECTION.CARS);
             return res.status(HTTP_STATUS_CODE.OK).json({ message: 'System is healthy' });
         } catch (error) {
             return res.status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR).json({ message: 'System is unhealty' });
