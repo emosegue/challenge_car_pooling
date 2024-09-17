@@ -1,7 +1,7 @@
 import { ValidationService, LoggerService } from '@services';
 import { Request } from 'express';
 import { ValidationError } from '@exceptions';
-import { CarData, GroupData } from '@models';
+import { CarDto, GroupDto } from '@dtos';
 
 jest.mock('../../src/domain/services/loggerService');
 
@@ -85,7 +85,7 @@ describe('validateBody', () => {
             }
         ];
 
-        const schema: CarData = {
+        const schema: CarDto = {
             id: 2,
             seats: 0,
         };
@@ -96,7 +96,7 @@ describe('validateBody', () => {
     it('should throw ValidationError if body is empty', () => {
         const body = {}
 
-        const schema: CarData = {
+        const schema: CarDto = {
             id: 2,
             seats: 0,
         };
@@ -116,7 +116,7 @@ describe('validateBody', () => {
             }
         ];
 
-        const schema: CarData = {
+        const schema: CarDto = {
             id: 2,
             seats: 0,
         };
@@ -137,7 +137,7 @@ describe('validateBody', () => {
             }
         ];
 
-        const schema: CarData = {
+        const schema: CarDto = {
             id: 2,
             seats: 0,
         };
@@ -158,7 +158,7 @@ describe('validateBody', () => {
             }
         ];
 
-        const schema: GroupData = {
+        const schema: GroupDto = {
             id: 2,
             people: 0,
         };

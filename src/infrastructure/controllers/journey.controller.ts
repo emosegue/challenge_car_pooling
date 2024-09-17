@@ -1,16 +1,26 @@
 import { NextFunction, Request, Response } from 'express';
-import { AddGroupUseCase, GetGroupByGroupIdUseCase, GetJourneyCarByGroupIdUseCase, GetCarUseCase, DropOffJourneyUseCase } from '@use-cases';
+import {
+    AddGroupUseCase,
+    GetGroupByGroupIdUseCase,
+    GetJourneyCarByGroupIdUseCase,
+    GetCarUseCase,
+    DropOffJourneyUseCase,
+    CreateOrUpdateJourneysUseCase
+} from '@use-cases';
 import { FirebaseJourneyRepository } from '@firebase/repository';
 import { ValidationService } from '@services';
-import { JourneyData, CarData, GroupData } from '@models';
+import { Journey, Car, Group } from '../../domain/entities';
 import { HTTP_STATUS_CODE } from '@constants';
+import { GroupDto, CarDto } from '@dtos';
 
 export class JourneyController {
     private getGroupByGroupId: GetGroupByGroupIdUseCase;
     private getJourneyByCarId: GetJourneyCarByGroupIdUseCase;
     private addGroup: AddGroupUseCase;
-    private removeJourneyByGroupId: DropOffJourneyUseCase
-    private getCarById: GetCarUseCase
+    private removeJourneyByGroupId: DropOffJourneyUseCase;
+    private getCarById: GetCarUseCase;
+
+    private createOrUpdateJourneys: CreateOrUpdateJourneysUseCase;
 
     constructor() {
         const journeyRepository = new FirebaseJourneyRepository();
@@ -19,19 +29,19 @@ export class JourneyController {
         this.removeJourneyByGroupId = new DropOffJourneyUseCase(journeyRepository);
         this.addGroup = new AddGroupUseCase(journeyRepository);
         this.getCarById = new GetCarUseCase(journeyRepository);
+        this.createOrUpdateJourneys = new CreateOrUpdateJourneysUseCase(journeyRepository);
     }
 
     async addJourney(req: Request, res: Response, next: NextFunction) {
-        const groupSchema: GroupData = { id: 1, people: 2 };
+        const groupSchema: GroupDto = { id: 1, people: 2 };
         try {
             ValidationService.validateHeaders(req, { 'content-type': 'application/json' })
             ValidationService.validateBody(req?.body, groupSchema, true);
 
-            const data: GroupData = req?.body;
+            const data: Group = req?.body;
 
             await this.addGroup.execute(data);
-
-            // TODO: add use case to match group with car
+            await this.createOrUpdateJourneys.execute();
 
             return res.status(HTTP_STATUS_CODE.OK).json()
         } catch (error) {
@@ -47,9 +57,8 @@ export class JourneyController {
 
             const groupId = Number(unserializedBody.ID);
 
-            await this.removeJourneyByGroupId.execute(groupId)
-
-            // TODO: add use case to match group with car
+            await this.removeJourneyByGroupId.execute(groupId);
+            await this.createOrUpdateJourneys.execute();
 
             return res.status(HTTP_STATUS_CODE.OK).json()
         } catch (error) {
@@ -70,22 +79,30 @@ export class JourneyController {
                 ValidationService.validateBody(unserializedBody, { ID: 1 }, true);
             }
 
-
             const groupId = Number(unserializedBody.ID);
-            const journey: JourneyData = await this.getJourneyByCarId.execute(groupId);
+            const journey: Journey = await this.getJourneyByCarId.execute(groupId);
 
             if (journey) {
-                const car: CarData = await this.getCarById.execute(journey.car);
+                const car: CarDto = await this.getCarById.execute(journey.car);
                 return res.status(HTTP_STATUS_CODE.OK).json(car);
             }
 
-            const group: GroupData = await this.getGroupByGroupId.execute(groupId)
+            const group: Group = await this.getGroupByGroupId.execute(groupId)
 
             if (group) {
                 return res.status(HTTP_STATUS_CODE.NO_CONTENT).json()
             }
 
             return res.status(HTTP_STATUS_CODE.NOT_FOUND).json()
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async processJourneys(req: Request, res: Response, next: NextFunction) {
+        try {
+            const journey = await this.createOrUpdateJourneys.execute();
+            return res.status(HTTP_STATUS_CODE.OK).json(journey);
         } catch (error) {
             next(error);
         }

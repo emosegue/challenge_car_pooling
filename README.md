@@ -40,7 +40,7 @@ possibly until they become frustrated and leave.
 Before running the application, make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (version 20.17.0 or later)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [npm](https://www.npmjs.com/)
 
 ### Installation
 

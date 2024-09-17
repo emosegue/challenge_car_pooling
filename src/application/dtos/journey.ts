@@ -1,4 +1,4 @@
-export interface JourneyData {
+export interface JourneyDto {
     id: number;
     group: number;
     car: number;
