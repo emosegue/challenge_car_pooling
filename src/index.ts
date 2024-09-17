@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import * as dotenv from 'dotenv';
 import appRoutes from './infrastructure/routes/index'
 import { errorMiddleware } from '@middlewares';
@@ -11,9 +11,7 @@ const HOST = process.env.HOST ?? 'localhost';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use('', appRoutes);
-
 app.use(errorMiddleware);
 
 app.listen(PORT, HOST, () => {
