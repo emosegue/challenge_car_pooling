@@ -32,10 +32,10 @@
                 "./src/util/validation-error.ts"
             ],
             "@firebase/config": [
-                "./src/infrastructure/config/firebaseConfig.ts"
+                "./src/infrastructure/config/firebase-config.ts"
             ],
             "@firebase/repository": [
-                "./src/infrastructure/db/firebaseJourneyRepository.ts"
+                "./src/infrastructure/db/firebase-journey-repository.ts"
             ]
         }
     },

@@ -14,11 +14,14 @@ module.exports = {
     coverageDirectory: 'coverage',
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
     moduleNameMapper: {
-        '^@controllers/(.*)$': '<rootDir>/src/controller/$1',
-        '^@models/(.*)$': '<rootDir>/src/domain/models/$1',
-        '^@services$': '<rootDir>/src/domain/services/index.ts',
-        '^@constants/(.*)$': '<rootDir>/src/constants/$1',
+        '^@controllers$': '<rootDir>/src/infrastructure/controllers/index.ts',
+        '^@models$': '<rootDir>/src/domain/models/index.ts',
         '^@exceptions$': '<rootDir>/src/domain/exceptions/index.ts',
-        '^@firebase/db$': '<rootDir>/src/repository/index.ts',
+        '^@services$': '<rootDir>/src/domain/services/index.ts',
+        '^@use-cases$': '<rootDir>/src/application/use_cases/index.ts',
+        '^@middlewares$': '<rootDir>/src/infrastructure/middlewares/index.ts',
+        '^@constants$': '<rootDir>/src/constants',
+        '^@firebase/config$': '<rootDir>/src/infrastructure/config/firebase-config.ts',
+        '^@firebase/repository$': '<rootDir>/src/infrastructure/db/firebase-journey-repository.ts'
     },
 };
