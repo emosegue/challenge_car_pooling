@@ -13,6 +13,10 @@ module.exports = {
     ],
     coverageDirectory: 'coverage',
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
+    coveragePathIgnorePatterns: [
+        '/node_modules/',
+        '/src/infrastructure/db/',
+    ],
     moduleNameMapper: {
         '^@controllers$': '<rootDir>/src/infrastructure/controllers/index.ts',
         '^@entities$': '<rootDir>/src/domain/entities/index.ts',

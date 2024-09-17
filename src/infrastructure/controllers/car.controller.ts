@@ -7,10 +7,11 @@ import { HTTP_STATUS_CODE } from '@constants';
 
 export class CarController {
     private reloadCarsUseCase: ReloadCarsUseCase;
+    private journeyRepository: FirebaseJourneyRepository;
 
-    constructor() {
-        const journeyRepository = new FirebaseJourneyRepository();
-        this.reloadCarsUseCase = new ReloadCarsUseCase(journeyRepository);
+    constructor(journeyRepository: FirebaseJourneyRepository) {
+        this.journeyRepository = journeyRepository;
+        this.reloadCarsUseCase = new ReloadCarsUseCase(this.journeyRepository);
     }
 
     async reloadCars(req: Request, res: Response, next: NextFunction) {
@@ -23,12 +24,9 @@ export class CarController {
 
             await this.reloadCarsUseCase.execute(carsData);
 
-            // TODO: add use case to match group with car
-
             return res.status(HTTP_STATUS_CODE.OK).json()
         } catch (error) {
             next(error);
         }
-
     }
 }

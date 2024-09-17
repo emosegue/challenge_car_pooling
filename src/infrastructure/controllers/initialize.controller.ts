@@ -6,14 +6,16 @@ import { DB_COLLECTION, HTTP_STATUS_CODE } from '@constants';
 
 export class InitializeController {
     private logger = LoggerService.getInstance();;
+    private journeyRepository: FirebaseJourneyRepository
 
-    constructor() { }
+    constructor(journeyRepository: FirebaseJourneyRepository) {
+        this.journeyRepository = journeyRepository;
+    }
 
     async init(req: Request, res: Response, next: NextFunction) {
         const { car_amount: carAmount, group_amount: groupAmount } = req?.body;
-        const repository = new FirebaseJourneyRepository();
-        const carGenerationData = await this.generateCars(repository, carAmount);
-        const groupGenerationData = await this.generateGroups(repository, groupAmount);
+        const carGenerationData = await this.generateCars(this.journeyRepository, carAmount);
+        const groupGenerationData = await this.generateGroups(this.journeyRepository, groupAmount);
 
         try {
             return res.status(HTTP_STATUS_CODE.OK).json({
