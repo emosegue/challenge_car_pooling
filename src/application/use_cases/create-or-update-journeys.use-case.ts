@@ -34,12 +34,12 @@ export class CreateOrUpdateJourneysUseCase {
                 this.journeyRepository.insertItem(newJourney, DB_COLLECTION.JOURNEYS);
                 this.journeyRepository.updateFieldItemById(DB_COLLECTION.CARS, bestCar.id, DB_COLLECTION_FIELDS.CARS.IS_AVAILABLE, false);
                 this.journeyRepository.updateFieldItemById(DB_COLLECTION.GROUPS, group.id, DB_COLLECTION_FIELDS.GROUPS.IS_TRAVELING, true);
-                this.logger.info(`The best car for groupId ${group.id} is the carId  ${bestCar.id}`)
+                //this.logger.info(`The best car for groupId ${group.id} is the carId  ${bestCar.id}`)
                 cars.splice(cars.indexOf(bestCar), 1)
             }
 
             if (!bestCar) {
-                console.log(`There is no car available for groupId ${group.id}`)
+                this.logger.warn(`There is no car available for groupId ${group.id}`)
             }
 
             bestCar = undefined;
