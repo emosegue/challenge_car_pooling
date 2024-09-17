@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-import appRoutes from './routes';
-import errorMiddleware from './middlewares/error-middleware';
+import appRoutes from './infrastructure/routes/index'
+import { errorMiddleware } from '@middlewares';
 
 dotenv.config();
 
@@ -17,5 +17,5 @@ app.use('', appRoutes);
 app.use(errorMiddleware);
 
 app.listen(PORT, HOST, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+    console.log(`⚡️[server]: Server is running at http://${HOST}:${PORT}`);
 });

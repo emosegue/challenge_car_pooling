@@ -7,8 +7,23 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "paths": {
+            "@controllers": [
+                "./src/infrastructure/controllers/index.ts"
+            ],
             "@models": [
-                "./src/models"
+                "./src/domain/models"
+            ],
+            "@exceptions": [
+                "./src/domain/exceptions/index.ts"
+            ],
+            "@services": [
+                "./src/domain/services"
+            ],
+            "@use-cases": [
+                "./src/application/use_cases"
+            ],
+            "@middlewares": [
+                "./src/infrastructure/middlewares/index.ts"
             ],
             "@constants": [
                 "./src/constants"
@@ -16,8 +31,11 @@
             "@model/error": [
                 "./src/util/validation-error.ts"
             ],
-            "@firebase/db": [
-                "./src/repository/index.ts"
+            "@firebase/config": [
+                "./src/infrastructure/config/firebaseConfig.ts"
+            ],
+            "@firebase/repository": [
+                "./src/infrastructure/db/firebaseJourneyRepository.ts"
             ]
         }
     },

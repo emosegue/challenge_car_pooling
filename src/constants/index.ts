@@ -1,5 +1,8 @@
+import { ids } from "webpack";
+
 const HTTP_STATUS_CODE = {
     OK: 200,
+    NO_CONTENT: 204,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     NOT_FOUND: 404,
@@ -8,7 +11,25 @@ const HTTP_STATUS_CODE = {
 
 const DB_COLLECTION = {
     CARS: 'cars',
-    JOURNEY: 'journey'
+    JOURNEYS: 'journeys',
+    GROUPS: 'groups'
 }
 
-export { HTTP_STATUS_CODE, DB_COLLECTION };
+const DB_COLLECTION_FIELDS = {
+    CARS: {
+        ID: 'id',
+        SEATS: 'seats'
+    },
+    GROUPS: {
+        ID: 'id',
+        PEOPLE: 'people'
+    },
+    JOURNEYS: {
+        ID: 'id',
+        CAR: 'people',
+        GROUP: 'group'
+    }
+
+}
+
+export { HTTP_STATUS_CODE, DB_COLLECTION, DB_COLLECTION_FIELDS };
