@@ -33,6 +33,49 @@ a car for 6; if a group of 2 requests a car you may take them in the car.
 This may mean that the group of 6 waits a long time,
 possibly until they become frustrated and leave.
 
+## How to Run It
+
+### Prerequisites
+
+Before running the application, make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (version 20.17.0 or later)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@gitlab-hiring.cabify.tech:cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF.git
+   cd car-pooling-challenge-candidate-Dc1YWM0NTF
+  ```
+
+2. Install dependencies
+
+   ```bash
+   npm install
+  ```
+
+3. Set up environment
+
+For the purposes of the challenge, the relevant information to be able to connect to Firebase is in the .env file so it is not necessary to do anything.
+In a real environment, this file would not only not be uploaded, but we would have to supply this need with a secrets service such as Google or AWS Secrets Manager.
+
+4. Run the application
+
+   ```bash
+   npm run start
+  ```
+
+## Tests
+
+The application has both unit and integration tests for those flows considered core. To run them, you must execute the command
+
+   ```bash
+   npm run test
+  ```
+
 ## Evaluation rules
 
 This challenge has a partially automated scoring system. This means that before
