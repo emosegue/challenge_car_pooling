@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import dotenv from 'dotenv';
+import { LoggerService } from '@services';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const auth = getAuth(app);
+const logger = LoggerService.getInstance();
 
 /**
  * This auth solution is not the end game of a correct one, for the purposes of the challenge I consider it sufficient.
@@ -26,10 +28,10 @@ const auth = getAuth(app);
 signInWithEmailAndPassword(auth, process.env.AUTH_USER, process.env.AUTH_PASSWORD)
     .then((userCredential) => {
         const user = userCredential.user;
-        console.log('User authenticated:', user.uid);
+        logger.info('Firebase user authenticated successfully:', user.email)
     })
     .catch((error) => {
-        console.error('Error on authentication:', error);
+        logger.error('Error on authentication:', error)
     });
 
 export { firestore, auth };

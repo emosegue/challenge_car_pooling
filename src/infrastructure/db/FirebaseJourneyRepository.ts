@@ -2,8 +2,11 @@ import { firestore, auth } from '@firebase/config';
 import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, limit } from 'firebase/firestore';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { JourneyRepository } from '../../domain/repositories/journeyRepository';
+import { ItemNotFoundError } from '@exceptions';
+import { LoggerService } from '@services';
 
 export class FirebaseJourneyRepository implements JourneyRepository {
+    private logger = LoggerService.getInstance();
 
     async testConnection(collectionName: string): Promise<void> {
         try {
@@ -25,12 +28,13 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                 return null;
             }
         } catch (error) {
-            console.error('Error fetching document:', error);
+            this.logger.error('Error fetching document', error)
             throw error;
         }
     }
 
     async getItemByField<T>(field: string, value: any, collectionName: string): Promise<T | null> {
+        const logger = LoggerService.getInstance();
         try {
             const q = query(collection(firestore, collectionName), where(field, '==', value));
             const querySnapshot = await getDocs(q);
@@ -42,25 +46,21 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                 return null;
             }
         } catch (error) {
-            console.error('Error fetching document:', error);
+            logger.error('Error fetching document:', error)
             throw error;
         }
     }
 
     async removeItemByField(field: string, value: any, collectionName: string): Promise<void> {
-        try {
-            const q = query(collection(firestore, collectionName), where(field, '==', value));
-            const querySnapshot = await getDocs(q);
+        const q = query(collection(firestore, collectionName), where(field, '==', value));
+        const querySnapshot = await getDocs(q);
 
-            if (!querySnapshot.empty) {
-                const deletePromises = querySnapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
-                await Promise.all(deletePromises);
-            } else {
-                console.log(`No items found with ${field} = ${value}`);
-            }
-        } catch (error) {
-            console.error('Error removing document:', error);
-            throw error;
+        if (!querySnapshot.empty) {
+            const deletePromises = querySnapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
+            await Promise.all(deletePromises);
+        } else {
+            this.logger.error(`No items found with ${field} = ${value}`);
+            throw new ItemNotFoundError(`No items found with ${field} = ${value}`)
         }
     }
 
@@ -82,6 +82,7 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                         reject(error);
                     }
                 } else {
+                    this.logger.error('Not authenticated user');
                     reject(new Error('Not authenticated user'));
                 }
             });
@@ -99,12 +100,14 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                         );
 
                         await Promise.all(insertPromises);
+                        this.logger.info('Items successfully added');
 
                         resolve();
                     } catch (error) {
                         reject(error);
                     }
                 } else {
+                    this.logger.error('Not authenticated user');
                     reject(new Error('Not authenticated user'));
                 }
             });
@@ -117,13 +120,14 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                 if (user) {
                     try {
                         await addDoc(collection(firestore, collectionName), data);
-                        console.log('Item successfully added');
+                        this.logger.info('Item successfully added');
                         resolve();
                     } catch (error) {
-                        console.error('Error on adding item:', error);
+                        this.logger.error('Error on adding item:', error);
                         reject(error);
                     }
                 } else {
+                    this.logger.error('Not authenticated user');
                     reject(new Error('Not authenticated user'));
                 }
             });
