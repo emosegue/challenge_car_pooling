@@ -46,16 +46,16 @@ Before running the application, make sure you have the following installed:
 
 1. Clone the repository:
 
-   ```bash
+```bash
    git clone git@gitlab-hiring.cabify.tech:cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF.git
    cd car-pooling-challenge-candidate-Dc1YWM0NTF
-  ```
+```
 
 2. Install dependencies
 
-   ```bash
-   npm install
-  ```
+```bash
+  npm install
+```
 
 3. Set up environment
 
@@ -64,17 +64,17 @@ In a real environment, this file would not only not be uploaded, but we would ha
 
 4. Run the application
 
-   ```bash
+```bash
    npm run start
-  ```
+```
 
 ## Tests
 
 The application has both unit and integration tests for those flows considered core. To run them, you must execute the command
 
-   ```bash
+```bash
    npm run test
-  ```
+```
 
 ## Evaluation rules
 
