@@ -4,6 +4,7 @@ import { GetJourneyCarByGroupIdUseCase } from './get-journey-car.use-case'
 import { AddGroupUseCase } from './add-group.use-case'
 import { GetCarUseCase } from './get-car.use-case'
 import { DropOffJourneyUseCase } from './drop-off-journey.use-case'
+import { CreateOrUpdateJourneysUseCase } from './create-or-update-journeys.use-case'
 
 export {
     ReloadCarsUseCase,
@@ -11,5 +12,6 @@ export {
     GetJourneyCarByGroupIdUseCase,
     AddGroupUseCase,
     GetCarUseCase,
-    DropOffJourneyUseCase
+    DropOffJourneyUseCase,
+    CreateOrUpdateJourneysUseCase
 }

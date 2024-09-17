@@ -15,7 +15,7 @@ module.exports = {
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
     moduleNameMapper: {
         '^@controllers$': '<rootDir>/src/infrastructure/controllers/index.ts',
-        '^@models$': '<rootDir>/src/domain/models/index.ts',
+        '^@entities$': '<rootDir>/src/domain/entities/index.ts',
         '^@exceptions$': '<rootDir>/src/domain/exceptions/index.ts',
         '^@services$': '<rootDir>/src/domain/services/index.ts',
         '^@use-cases$': '<rootDir>/src/application/use_cases/index.ts',

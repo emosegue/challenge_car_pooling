@@ -18,14 +18,15 @@ const DB_COLLECTION = {
 const DB_COLLECTION_FIELDS = {
     CARS: {
         ID: 'id',
-        SEATS: 'seats'
+        SEATS: 'seats',
+        IS_AVAILABLE: 'is_available'
     },
     GROUPS: {
         ID: 'id',
-        PEOPLE: 'people'
+        PEOPLE: 'people',
+        IS_TRAVELING: 'is_traveling'
     },
     JOURNEYS: {
-        ID: 'id',
         CAR: 'people',
         GROUP: 'group'
     }

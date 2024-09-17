@@ -1,4 +1,4 @@
-export interface CarData {
+export interface CarDto {
     id: number;
     seats: number;
 }

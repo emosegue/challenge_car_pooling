@@ -10,8 +10,14 @@
             "@controllers": [
                 "./src/infrastructure/controllers/index.ts"
             ],
-            "@models": [
-                "./src/domain/models"
+            "@entities": [
+                "./src/domain/entities/index.ts"
+            ],
+            "@dtos": [
+                "./src/application/dtos/index.ts"
+            ],
+            "@mappers": [
+                "./src/domain/mappers/index.ts"
             ],
             "@exceptions": [
                 "./src/domain/exceptions/index.ts"

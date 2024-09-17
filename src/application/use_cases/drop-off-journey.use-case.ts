@@ -1,5 +1,5 @@
 import { DB_COLLECTION, DB_COLLECTION_FIELDS } from '@constants';
-import { JourneyRepository } from '../../domain/repositories/journeyRepository';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 
 export class DropOffJourneyUseCase {
     constructor(private journeyRepository: JourneyRepository) { }

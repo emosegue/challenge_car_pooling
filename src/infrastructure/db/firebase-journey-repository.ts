@@ -1,7 +1,7 @@
 import { firestore, auth } from '@firebase/config';
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, limit } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, limit, orderBy, updateDoc } from 'firebase/firestore';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { JourneyRepository } from '../../domain/repositories/journeyRepository';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 import { ItemNotFoundError } from '@exceptions';
 import { LoggerService } from '@services';
 
@@ -47,6 +47,32 @@ export class FirebaseJourneyRepository implements JourneyRepository {
             }
         } catch (error) {
             logger.error('Error fetching document:', error)
+            throw error;
+        }
+    }
+
+    async getItemsByCondition<T>(field: string, value: any, collectionName: string, orderByField: string): Promise<T[]> {
+        const logger = LoggerService.getInstance();
+        try {
+            const collectionRef = collection(firestore, collectionName);
+            const q = query(
+                collectionRef,
+                where(field, '==', value),
+                orderBy(orderByField)
+            );
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const items: T[] = [];
+                querySnapshot.forEach(doc => {
+                    items.push(doc.data() as T);
+                });
+                return items;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            logger.error('Error fetching documents:', error);
             throw error;
         }
     }
@@ -134,4 +160,37 @@ export class FirebaseJourneyRepository implements JourneyRepository {
         });
     }
 
+    async updateFieldItemById<T>(collectionName: string, id: number, fieldName: string, value: any): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            onAuthStateChanged(auth, async (user: User | null) => {
+                if (user) {
+                    try {
+                        const colRef = collection(firestore, collectionName);
+                        const q = query(colRef, where('id', '==', id));
+                        const querySnapshot = await getDocs(q);
+
+                        if (!querySnapshot.empty) {
+                            const docSnap = querySnapshot.docs[0];
+                            const docRef = doc(firestore, collectionName, docSnap.id);
+
+                            await updateDoc(docRef, {
+                                [fieldName]: value
+                            });
+                            this.logger.info('Item successfully updated');
+                            resolve();
+                        } else {
+                            this.logger.error('No document found with the specified id');
+                            reject(new Error('No document found with the specified id'));
+                        }
+                    } catch (error) {
+                        this.logger.error('Error updating item:', error);
+                        reject(error);
+                    }
+                } else {
+                    this.logger.error('Not authenticated user');
+                    reject(new Error('Not authenticated user'));
+                }
+            });
+        });
+    }
 }

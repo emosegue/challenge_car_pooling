@@ -23,7 +23,7 @@ const logger = LoggerService.getInstance();
 
 /**
  * This auth solution is not the end game of a correct one, for the purposes of the challenge I consider it sufficient.
- * In a real use case I would use some secrets service to store this type of information.
+ * In a real use case I would use a secrets service to store this information.
  */
 signInWithEmailAndPassword(auth, process.env.AUTH_USER, process.env.AUTH_PASSWORD)
     .then((userCredential) => {
