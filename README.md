@@ -15,9 +15,9 @@ up to 4, 5 or 6 people.
 
 People requests cars in groups of 1 to 6. People in the same group want to ride
 on the same car. You can take any group at any car that has enough empty seats
-for them. If it's not possible to accommodate them, they're willing to wait until 
+for them. If it's not possible to accommodate them, they're willing to wait until
 there's a car available for them. Once a car is available for a group
-that is waiting, they should ride. 
+that is waiting, they should ride.
 
 Once they get a car assigned, they will journey until the drop off, you cannot
 ask them to take another car (i.e. you cannot swap them to another car to
@@ -53,7 +53,7 @@ Before running the application, make sure you have the following installed:
 
 2. Install dependencies
 
-```bash
+```node
   npm install
 ```
 
@@ -64,7 +64,7 @@ In a real environment, this file would not only not be uploaded, but we would ha
 
 4. Run the application
 
-```bash
+```node
    npm run start
 ```
 
@@ -72,9 +72,33 @@ In a real environment, this file would not only not be uploaded, but we would ha
 
 The application has both unit and integration tests for those flows considered core. To run them, you must execute the command
 
-```bash
+```node
    npm run test
 ```
+
+## Implement Decisions
+
+### Considerations
+
+**Synchronism vs Asynchronism**
+
+It is assumed that in this application we will perform the assignment *synchronously* to the client requests. This means that we will return a response once we have performed the corresponding operations in the database. In a real case, the correct way to perform the operations can be with a synchronously cache and a cache consistency mechanism with the database. Up to this point, we are still talking about synchronization. But a higher level of correctness would be asynchronous processing, where the server is responsible for creating trips and informing both the group and the car of this event.
+
+**Database**
+
+Consider to the scope of the challenge, it is important to have a cloud information repository to avoid recruiters having to install a local db or deal with configurations, docker images, etc. For this reason, I chose to use Firebase with Google Authentication and generate three collections: cars, journeys and group. I know that the .env file implementation is not correct in a real environment, the correct thing would be to use some secrets service, but given the scope of the challenge I considered that it was the most practical way to config an environment. An interface was used to allow another repository to be easily implemented if required.
+
+**Cache**
+
+The best way to perform the application with at least $`10^4`$ / $`10^5`$ cars / waiting groups is using a cache. The most expensive operation in this type of services is the interaction with the database. That is why I have used a very simple cache implementation to try to reflect the benefits of its use for practical purposes. This cache maintains consistency with the database and avoids having to consult it every time we want to process it. For practical purposes, we keep the available cars and groups that are not traveling ordered as we want to process them.
+
+**What kind of cache/cache service we use and we could use?**
+
+For the purposes of the challenge, the cache is implemented in a very simple way, allowing data to be stored in memory with an object. If we move this to production, Redis or Memcached could become a scalable solution.
+
+**Error messaging and Logs**
+
+I consider this point to be no less important, since many times the backend offers sensitive information to any attacker, such as "I can't answer you because you're using the header wrong, use it this way." In this sense, messages to the client are encapsulated in a 400 error indicating that the validation went wrong, but in the logs indicating what went wrong. In this way, at the troubleshooting level, we would have the information to know what is happening, but not for a possible attacker.
 
 ## Evaluation rules
 
@@ -87,17 +111,17 @@ and scoring.
 All checks need to pass in order for the challenge to be reviewed.
 
 - The `acceptance` test step in the `.gitlab-ci.yml` must pass in master before you
-submit your solution. We will not accept any solutions that do not pass or omit
-this step. This is a public check that can be used to assert that other tests 
-will run successfully on your solution. **This step needs to run without 
-modification**
-- _"further tests"_ will be used to prove that the solution works correctly. 
-These are not visible to you as a candidate and will be run once you submit 
-the solution
+  submit your solution. We will not accept any solutions that do not pass or omit
+  this step. This is a public check that can be used to assert that other tests
+  will run successfully on your solution. **This step needs to run without
+  modification**
+- _"further tests"_ will be used to prove that the solution works correctly.
+  These are not visible to you as a candidate and will be run once you submit
+  the solution
 
 ### Scoring
 
-There is a number of scoring systems being run on your solution after it is 
+There is a number of scoring systems being run on your solution after it is
 submitted. It is ok if these do not pass, but they add information for the
 reviewers.
 
@@ -198,7 +222,8 @@ with, or no car if they are still waiting to be served.
 
 Responses:
 
-* **200 OK** With the car as the payload when the group is assigned to a car. See below for the expected car representation 
+* **200 OK** With the car as the payload when the group is assigned to a car. See below for the expected car representation
+
 ```json
   {
     "id": 1,
@@ -213,7 +238,7 @@ Responses:
 
 ## Tooling
 
-At Cabify, we use Gitlab and Gitlab CI for our backend development work. 
+At Cabify, we use Gitlab and Gitlab CI for our backend development work.
 In this repo you may find a [.gitlab-ci.yml](./.gitlab-ci.yml) file which
 contains some tooling that would simplify the setup and testing of the
 deliverable. This testing can be enabled by simply uncommenting the final
@@ -224,19 +249,19 @@ Additionally, you will find a basic Dockerfile which you could use a
 baseline, be sure to modify it as much as needed, but keep the exposed port
 as is to simplify the testing.
 
-:warning: Avoid dependencies and tools that would require changes to the 
-`acceptance` step of [.gitlab-ci.yml](./.gitlab-ci.yml), such as 
+:warning: Avoid dependencies and tools that would require changes to the
+`acceptance` step of [.gitlab-ci.yml](./.gitlab-ci.yml), such as
 `docker-compose`
 
-:warning: The challenge needs to be self-contained so we can evaluate it. 
-If the language you are using has limitations that block you from solving this 
-challenge without using a database, please document your reasoning in the 
+:warning: The challenge needs to be self-contained so we can evaluate it.
+If the language you are using has limitations that block you from solving this
+challenge without using a database, please document your reasoning in the
 readme and use an embedded one such as sqlite.
 
 You are free to use whatever programming language you deem is best to solve the
 problem but please bear in mind we want to see your best!
 
-You can ignore the Gitlab warning "Cabify Challenge has exceeded its pipeline 
+You can ignore the Gitlab warning "Cabify Challenge has exceeded its pipeline
 minutes quota," it will not affect your test or the ability to run pipelines on
 Gitlab.
 
@@ -253,9 +278,9 @@ Gitlab.
 
 ## Feedback
 
-In Cabify, we really appreciate your interest and your time. We are highly 
-interested on improving our Challenge and the way we evaluate our candidates. 
-Hence, we would like to beg five more minutes of your time to fill the 
+In Cabify, we really appreciate your interest and your time. We are highly
+interested on improving our Challenge and the way we evaluate our candidates.
+Hence, we would like to beg five more minutes of your time to fill the
 following survey:
 
 - https://forms.gle/EzPeURspTCLG1q9T7
