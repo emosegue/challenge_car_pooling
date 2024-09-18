@@ -3,7 +3,6 @@ import { LoggerService } from '@services';
 import { ValidationError } from '@exceptions';
 
 export class ValidationService {
-
     /**
      * Validates that the request headers match the expected values exactly.
      * If any header does not match, a `ValidationError` is thrown.

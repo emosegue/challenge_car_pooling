@@ -1,4 +1,5 @@
-import { LoggerService } from './loggerService';
-import { ValidationService } from './validatorService';
+import { LoggerService } from './logger-service';
+import { ValidationService } from './validation-service';
+import { CacheService } from './cache-service';
 
-export { LoggerService, ValidationService };
+export { LoggerService, ValidationService, CacheService };

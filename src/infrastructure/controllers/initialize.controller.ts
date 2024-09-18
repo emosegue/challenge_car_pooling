@@ -17,6 +17,7 @@ export class InitializeController {
         const carGenerationData = await this.generateCars(this.journeyRepository, carAmount);
         const groupGenerationData = await this.generateGroups(this.journeyRepository, groupAmount);
 
+        await this.journeyRepository.removeAllItems(DB_COLLECTION.JOURNEYS);
         try {
             return res.status(HTTP_STATUS_CODE.OK).json({
                 carGenerationData,

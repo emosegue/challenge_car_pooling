@@ -1,6 +1,5 @@
 export interface JourneyRepository {
     testConnection(collectionName: string): Promise<void>;
-    getItemById<T>(id: string, collectionName: string): Promise<T | null>
     getItemByField<T>(field: string, value: any, collectionName: string): Promise<T | null>
     getItemsByCondition<T>(field: string, value: any, collectionName: string, orderByField: string): Promise<T[]>
     removeItemByField(field: string, value: any, collectionName: string): Promise<void>

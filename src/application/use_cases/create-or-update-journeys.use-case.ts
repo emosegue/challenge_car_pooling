@@ -9,9 +9,10 @@ export class CreateOrUpdateJourneysUseCase {
     constructor(private journeyRepository: JourneyRepository) { }
 
     async execute(): Promise<any> {
-        const cars: Car[] = await this.journeyRepository.getItemsByCondition(
+        this.logger.info(`Journey assignment is processing...`)
+        const cars: Car[] = await this.journeyRepository.getItemsByCondition<Car>(
             DB_COLLECTION_FIELDS.CARS.IS_AVAILABLE, true, DB_COLLECTION.CARS, DB_COLLECTION_FIELDS.CARS.SEATS);
-        const groups: Group[] = await this.journeyRepository.getItemsByCondition(
+        const groups: Group[] = await this.journeyRepository.getItemsByCondition<Group>(
             DB_COLLECTION_FIELDS.GROUPS.IS_TRAVELING, false, DB_COLLECTION.GROUPS, DB_COLLECTION_FIELDS.GROUPS.ID);
 
         //  For future iterations we can improve this implementation with some kind of tree to avoid O(n2).

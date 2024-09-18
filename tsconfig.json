@@ -23,7 +23,7 @@
                 "./src/domain/exceptions/index.ts"
             ],
             "@services": [
-                "./src/domain/services"
+                "./src/domain/services/index.ts"
             ],
             "@use-cases": [
                 "./src/application/use_cases"
