@@ -3,10 +3,40 @@ import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, query, where, limi
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { JourneyRepository } from '../../domain/repositories/journey-repository';
 import { ItemNotFoundError } from '@exceptions';
-import { LoggerService } from '@services';
+import { CacheService, LoggerService } from '@services';
+import { Car, Group } from '@entities';
 
 export class FirebaseJourneyRepository implements JourneyRepository {
     private logger = LoggerService.getInstance();
+    public cacheService: CacheService<any>;
+
+    constructor(cacheService?: CacheService<any>) {
+        if (cacheService) {
+            this.cacheService = cacheService;
+            this.initializeCache();
+        }
+    }
+
+    private async getAllItemsFromCollection(collectionName: string) {
+        const q = query(collection(firestore, collectionName));
+        const querySnapshot = await getDocs(q);
+
+        const items: any[] = [];
+        querySnapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() });
+        });
+
+        return items;
+    }
+
+    async initializeCache() {
+        const cars = await this.getAllItemsFromCollection('cars');
+        const groups = await this.getAllItemsFromCollection('groups');
+        const journeys = await this.getAllItemsFromCollection('journeys');
+        this.cacheService.set('cars', cars);
+        this.cacheService.set('groups', groups);
+        this.cacheService.set('journeys', journeys);
+    }
 
     async testConnection(collectionName: string): Promise<void> {
         try {
@@ -17,25 +47,15 @@ export class FirebaseJourneyRepository implements JourneyRepository {
         }
     }
 
-    async getItemById<T>(id: string, collectionName: string): Promise<T | null> {
-        try {
-            const docRef = doc(firestore, collectionName, id);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                return docSnap.data() as T;
-            } else {
-                return null;
-            }
-        } catch (error) {
-            this.logger.error('Error fetching document', error)
-            throw error;
-        }
-    }
-
     async getItemByField<T>(field: string, value: any, collectionName: string): Promise<T | null> {
         const logger = LoggerService.getInstance();
         try {
+            const cacheData = this.cacheService.get(collectionName) as T[];
+            const cachedItem = cacheData?.find((item) => (item as any)[field] === value);
+            if (cachedItem) {
+                return cachedItem;
+            }
+
             const q = query(collection(firestore, collectionName), where(field, '==', value));
             const querySnapshot = await getDocs(q);
 
@@ -54,6 +74,15 @@ export class FirebaseJourneyRepository implements JourneyRepository {
     async getItemsByCondition<T>(field: string, value: any, collectionName: string, orderByField: string): Promise<T[]> {
         const logger = LoggerService.getInstance();
         try {
+            const cacheData = this.cacheService.get(collectionName) as any[];
+
+            if (cacheData) {
+                const availableElement = cacheData.filter(element => element[field] === value);
+                availableElement.sort((a, b) => a[orderByField] - b[orderByField]);
+
+                return availableElement;
+            }
+
             const collectionRef = collection(firestore, collectionName);
             const q = query(
                 collectionRef,
@@ -67,6 +96,7 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                 querySnapshot.forEach(doc => {
                     items.push(doc.data() as T);
                 });
+                console.log('items sorted', items);
                 return items;
             } else {
                 return [];
@@ -80,6 +110,14 @@ export class FirebaseJourneyRepository implements JourneyRepository {
     async removeItemByField(field: string, value: any, collectionName: string): Promise<void> {
         const q = query(collection(firestore, collectionName), where(field, '==', value));
         const querySnapshot = await getDocs(q);
+
+        const cacheData = this.cacheService.get(collectionName) as any[];
+
+        if (cacheData) {
+            const updatedCacheData = cacheData.filter((item) => (item as any)[field] !== value);
+            this.cacheService.set(collectionName, updatedCacheData);
+            //console.log('removed', collectionName, this.cacheService.get(collectionName));
+        }
 
         if (!querySnapshot.empty) {
             const deletePromises = querySnapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
@@ -98,6 +136,7 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                         const collectionRef = collection(firestore, collectionName);
                         const snapshot = await getDocs(collectionRef);
 
+                        this.cacheService.clear(collectionName);
                         const deletePromises = snapshot.docs.map((docSnapshot) =>
                             deleteDoc(doc(firestore, collectionName, docSnapshot.id))
                         );
@@ -120,14 +159,13 @@ export class FirebaseJourneyRepository implements JourneyRepository {
             onAuthStateChanged(auth, async (user: User | null) => {
                 if (user) {
                     try {
+                        this.cacheService.set(collectionName, [...this.cacheService.get(collectionName) ?? [], ...items ?? []]);
                         const collectionRef = collection(firestore, collectionName);
                         const insertPromises = items.map(item =>
                             addDoc(collectionRef, item)
                         );
 
                         await Promise.all(insertPromises);
-                        this.logger.info('Items successfully added');
-
                         resolve();
                     } catch (error) {
                         reject(error);
@@ -140,13 +178,14 @@ export class FirebaseJourneyRepository implements JourneyRepository {
         });
     }
 
-    async insertItem<T>(data: T, collectionName: string): Promise<void> {
+    async insertItem<T>(item: T, collectionName: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             onAuthStateChanged(auth, async (user: User | null) => {
                 if (user) {
                     try {
-                        await addDoc(collection(firestore, collectionName), data);
-                        this.logger.info('Item successfully added');
+                        this.cacheService.set(collectionName, [...this.cacheService.get(collectionName) ?? [], item])
+                        //console.log(collectionName, this.cacheService.get(collectionName));
+                        await addDoc(collection(firestore, collectionName), item);
                         resolve();
                     } catch (error) {
                         this.logger.error('Error on adding item:', error);
@@ -165,6 +204,13 @@ export class FirebaseJourneyRepository implements JourneyRepository {
             onAuthStateChanged(auth, async (user: User | null) => {
                 if (user) {
                     try {
+                        const cacheData = this.cacheService.get(collectionName) as T[];
+                        let cachedItem = cacheData?.find((item) => (item as any)['id'] === id);
+                        if (cachedItem) {
+                            (cachedItem as any)[fieldName] = value;
+                            this.cacheService.set(collectionName, cacheData);
+                        }
+
                         const colRef = collection(firestore, collectionName);
                         const q = query(colRef, where('id', '==', id));
                         const querySnapshot = await getDocs(q);
@@ -176,7 +222,6 @@ export class FirebaseJourneyRepository implements JourneyRepository {
                             await updateDoc(docRef, {
                                 [fieldName]: value
                             });
-                            this.logger.info('Item successfully updated');
                             resolve();
                         } else {
                             this.logger.error('No document found with the specified id');

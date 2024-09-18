@@ -138,7 +138,39 @@ Indicate the service has started up correctly and is ready to accept requests.
 
 Responses:
 
-* **200 OK** When the service is ready to receive requests.
+- **200 OK** When the service is ready to receive requests.
+
+### POST /init
+
+Generate a random group of cars and groups and store into the database.
+
+**Body** _required_ The list of cars to load.
+
+Sample:
+
+```json
+{
+    "car_amount": 30,
+    "group_amount": 10
+}
+```
+
+Responses:
+
+* **200 OK** When data was generate and stored successfully.
+* **500 Bad Request** When there is a failure in the request format, expected
+  headers, or the payload can't be unmarshalled.
+
+### POST /process_journey
+
+Start manually the process of associate car with a group and store the result into database
+
+Responses:
+
+- **200 OK** When the process was finished successfully
+
+- **500 Bad Request** When there is a failure in the request format, expected
+  headers, or the payload can't be unmarshalled.
 
 ### PUT /cars
 
@@ -284,5 +316,6 @@ Hence, we would like to beg five more minutes of your time to fill the
 following survey:
 
 - https://forms.gle/EzPeURspTCLG1q9T7
+  ✅ _Form answered as emanuelmosegue@gmail.com_
 
 Your participation is really important. Thanks for your contribution!

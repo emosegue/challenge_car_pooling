@@ -1,11 +1,13 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { CarController, JourneyController, StatusController } from '@controllers';
 import { InitializeController } from '../controllers/initialize.controller';
 import { FirebaseJourneyRepository } from '@firebase/repository';
+import { CacheService } from '@services';
 
 const router = Router();
 
-const journeyRepository = new FirebaseJourneyRepository();
+const cache = new CacheService();
+const journeyRepository = new FirebaseJourneyRepository(cache);
 
 router.post('/init', (req, res, next) => { new InitializeController(journeyRepository).init(req, res, next) });
 router.get('/status', (req, res, next) => { new StatusController(journeyRepository).checkStatus(req, res, next) });

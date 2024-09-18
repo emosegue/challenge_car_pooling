@@ -6,6 +6,6 @@ export class GetGroupByGroupIdUseCase {
     constructor(private journeyRepository: JourneyRepository) { }
 
     async execute(groupId: number): Promise<Group | null> {
-        return await this.journeyRepository.getItemByField(DB_COLLECTION_FIELDS.GROUPS.ID, groupId, DB_COLLECTION.GROUPS);
+        return await this.journeyRepository.getItemByField<Group>(DB_COLLECTION_FIELDS.GROUPS.ID, groupId, DB_COLLECTION.GROUPS);
     }
 }

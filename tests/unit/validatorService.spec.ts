@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { ValidationError } from '@exceptions';
 import { CarDto, GroupDto } from '@dtos';
 
-jest.mock('../../src/domain/services/loggerService');
+jest.mock('../../src/domain/services/logger-service');
 
 describe('validateHeaders', () => {
     it('should validate headers successfully', () => {

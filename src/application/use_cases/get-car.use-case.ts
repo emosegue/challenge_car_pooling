@@ -8,7 +8,7 @@ export class GetCarUseCase {
     constructor(private journeyRepository: JourneyRepository) { }
 
     async execute(carId: number): Promise<CarDto | null> {
-        const car: Car = await this.journeyRepository.getItemByField(DB_COLLECTION_FIELDS.CARS.ID, carId, DB_COLLECTION.CARS)
+        const car: Car = await this.journeyRepository.getItemByField<Car>(DB_COLLECTION_FIELDS.CARS.ID, carId, DB_COLLECTION.CARS)
         return mapCarToDto(car);
     }
 
