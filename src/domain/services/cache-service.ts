@@ -16,4 +16,8 @@ export class CacheService<T> {
     clearAll(): void {
         this.cache = {};
     }
+
+    isEmpty(): boolean {
+        return Object.values(this.cache).length == 0
+    }
 }
