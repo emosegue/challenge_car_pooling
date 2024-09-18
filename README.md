@@ -86,7 +86,7 @@ It is assumed that in this application we will perform the assignment *synchrono
 
 **Database**
 
-Consider to the scope of the challenge, it is important to have a cloud information repository to avoid recruiters having to install a local db or deal with configurations, docker images, etc. For this reason, I chose to use Firebase with Google Authentication and generate three collections: cars, journeys and group. I know that the .env file implementation is not correct in a real environment, the correct thing would be to use some secrets service, but given the scope of the challenge I considered that it was the most practical way to config an environment. An interface was used to allow another repository to be easily implemented if required.
+Consider to the scope of the challenge, it is important to have a cloud information repository to avoid recruiters having to install a local db or deal with configurations, docker images, etc. For this reason, I chose to use Firebase with Google Authentication and generate three collections: cars, journeys and group. All necessary environment data to run the application is located on .env file. This implementation is not correct in a real environment, the correct thing would be to use some secrets service, but given the scope of the challenge I considered that it was the most practical way. Aditionally, an interface was used to allow another repository to be easily implemented if required.
 
 **Cache**
 
