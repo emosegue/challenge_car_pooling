@@ -17,5 +17,5 @@
 **2024-09-17** - _Emanuel Mosegue (emanuelmosegue@gmail.com)_
 
 - asignment logic and init data feature added [#6] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/6)
-- integration tests and cache added [#7] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/7)
-- unit test for cache service [#8] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/8)
+- integration tests added [#7] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/7)
+- cache service added [#8] (https://gitlab-hiring.cabify.tech/cabify-challenge/car-pooling-challenge-candidate-Dc1YWM0NTF/-/merge_requests/8)
