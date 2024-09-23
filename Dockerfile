@@ -9,4 +9,4 @@ EXPOSE 9091
 
 COPY car-pooling-challenge /
 
-ENTRYPOINT [ "/car-pooling-challenge" ]
+ENTRYPOINT [ "/car-pooling-challenge-candidate-Dc1YWM0NTF"]
