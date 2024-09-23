@@ -4,6 +4,9 @@ stages:
   - docker
   - acceptance
 
+variables:
+  NODE_ENV: 'production'
+
 build:
   stage: build
   image: node:20-alpine
