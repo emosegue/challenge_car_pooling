@@ -1,12 +1,13 @@
-FROM alpine:latest
+FROM node:20
 
-# This Dockerfile is optimized for go binaries, change it as much as necessary
-# for your language of choice.
+WORKDIR usr/src/app
 
-RUN apk --no-cache add ca-certificates libc6-compat
+COPY package*.json ./
+
+RUN npm run install
+
+COPY . .
 
 EXPOSE 9091
 
-COPY car-pooling-challenge-candidate-Dc1YWM0NTF /
-
-ENTRYPOINT [ "/car-pooling-challenge-candidate-Dc1YWM0NTF"]
+CMD ["npm", "start"]

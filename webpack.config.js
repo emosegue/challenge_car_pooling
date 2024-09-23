@@ -60,6 +60,6 @@ module.exports = {
     plugins,
     externals: [nodeExternals()],
     target: 'node',
-    mode: NODE_ENV,
+    mode: NODE_ENV === 'development' ? 'development' : 'production',
     watch: NODE_ENV === 'development',
 };

@@ -1,12 +1,19 @@
 ---
 stages:
+  - test
   - build
   - docker
   - acceptance
 
+test:
+  stage: test
+  image: node:20-alpine
+  script:
+    - npm run test
+
 build:
   stage: build
-  image: node:20
+  image: node:20-alpine
   artifacts:
     paths:
       - build/src/
