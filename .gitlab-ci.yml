@@ -3,6 +3,9 @@ stages:
   - build
   - docker
   - acceptance
+
+variables:
+  NODE_ENV: 'production'
   
 build:
   stage: build

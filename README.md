@@ -95,7 +95,7 @@ It is assumed that in this application we will perform the assignment *synchrono
 **Database**
 
 I thought it was appropriate to propose both a cloud-based approach and a local approach to the challenge. Both are functional, except that the limitation of the cloud approach is the response time and the cost. Currently, Firebase has a usage quota that, with a load of tests, can be quite expensive.
-Both approaches have an in-memory cache storage to speed up operations. It should be noted that due to time constraints, the cloud approach was prioritized, which is why localDB is not implemented.Consider to the scope of the challenge, it is important to have a cloud information repository to avoid recruiters having to install a local db or deal with configurations, docker images, etc. For this reason, I chose to use Firebase with Google Authentication and generate three collections: cars, journeys and group. All necessary environment data to run the application is located on .env file. This implementation is not correct in a real environment, the correct thing would be to use some secrets service, but given the scope of the challenge I considered that it was the most practical way. Aditionally, an interface was used to allow another repository to be easily implemented if required
+Both approaches have an in-memory cache storage to speed up operations. It should be noted that due to time constraints, the cloud approach was prioritized, which is why localDB is not implemented.
 
 
 ![](./docs/repository.png)
