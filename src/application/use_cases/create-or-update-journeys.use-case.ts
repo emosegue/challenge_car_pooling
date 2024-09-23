@@ -12,6 +12,7 @@ export class CreateOrUpdateJourneysUseCase {
         this.logger.info(`Journey assignment is processing...`)
         const cars: Car[] = await this.journeyRepository.getItemsByCondition<Car>(
             DB_COLLECTION_FIELDS.CARS.IS_AVAILABLE, true, DB_COLLECTION.CARS, DB_COLLECTION_FIELDS.CARS.SEATS);
+
         const groups: Group[] = await this.journeyRepository.getItemsByCondition<Group>(
             DB_COLLECTION_FIELDS.GROUPS.IS_TRAVELING, false, DB_COLLECTION.GROUPS, DB_COLLECTION_FIELDS.GROUPS.ID);
 

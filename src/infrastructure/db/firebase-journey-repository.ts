@@ -4,7 +4,6 @@ import { User, onAuthStateChanged } from 'firebase/auth';
 import { JourneyRepository } from '../../domain/repositories/journey-repository';
 import { ItemNotFoundError } from '@exceptions';
 import { CacheService, LoggerService } from '@services';
-import { Car, Group } from '@entities';
 
 export class FirebaseJourneyRepository implements JourneyRepository {
     private logger = LoggerService.getInstance();
@@ -29,7 +28,7 @@ export class FirebaseJourneyRepository implements JourneyRepository {
         return items;
     }
 
-    async initializeCache() {
+    private async initializeCache() {
         const cars = await this.getAllItemsFromCollection('cars');
         const groups = await this.getAllItemsFromCollection('groups');
         const journeys = await this.getAllItemsFromCollection('journeys');

@@ -10,7 +10,7 @@ dotenv.config();
 const { NODE_ENV } = process.env;
 const plugins = [];
 
-if (NODE_ENV !== 'production') {
+if (NODE_ENV.trim() !== 'production') {
     plugins.push(
         new WebpackShellPluginNext({
             onBuildEnd: {
@@ -60,6 +60,6 @@ module.exports = {
     plugins,
     externals: [nodeExternals()],
     target: 'node',
-    mode: NODE_ENV,
+    mode: NODE_ENV === 'development' ? 'development' : 'production',
     watch: NODE_ENV === 'development',
 };

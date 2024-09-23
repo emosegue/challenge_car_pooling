@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { ReloadCarsUseCase } from '@use-cases';
-import { FirebaseJourneyRepository } from '@firebase/repository';
 import { ValidationService } from '@services';
 import { Car } from '../../domain/entities';
 import { HTTP_STATUS_CODE } from '@constants';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 
 export class CarController {
     private reloadCarsUseCase: ReloadCarsUseCase;
-    private journeyRepository: FirebaseJourneyRepository;
+    private journeyRepository: JourneyRepository;
 
-    constructor(journeyRepository: FirebaseJourneyRepository) {
+    constructor(journeyRepository: JourneyRepository) {
         this.journeyRepository = journeyRepository;
         this.reloadCarsUseCase = new ReloadCarsUseCase(this.journeyRepository);
     }

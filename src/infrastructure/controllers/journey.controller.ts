@@ -7,14 +7,14 @@ import {
     DropOffJourneyUseCase,
     CreateOrUpdateJourneysUseCase
 } from '@use-cases';
-import { FirebaseJourneyRepository } from '@firebase/repository';
 import { ValidationService } from '@services';
 import { Journey, Car, Group } from '../../domain/entities';
 import { HTTP_STATUS_CODE } from '@constants';
 import { GroupDto, CarDto } from '@dtos';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 
 export class JourneyController {
-    private journeyRepository: FirebaseJourneyRepository
+    private journeyRepository: JourneyRepository
     private getGroupByGroupId: GetGroupByGroupIdUseCase;
     private getJourneyByCarId: GetJourneyCarByGroupIdUseCase;
     private addGroup: AddGroupUseCase;
@@ -23,7 +23,7 @@ export class JourneyController {
 
     private createOrUpdateJourneys: CreateOrUpdateJourneysUseCase;
 
-    constructor(journeyRepository: FirebaseJourneyRepository) {
+    constructor(journeyRepository: JourneyRepository) {
         this.journeyRepository = journeyRepository;
         this.getGroupByGroupId = new GetGroupByGroupIdUseCase(this.journeyRepository);
         this.getJourneyByCarId = new GetJourneyCarByGroupIdUseCase(this.journeyRepository);

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { FirebaseJourneyRepository } from '@firebase/repository';
 import { DB_COLLECTION, HTTP_STATUS_CODE } from '@constants';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 
 export class StatusController {
-    private journeyRepository: FirebaseJourneyRepository;
+    private journeyRepository: JourneyRepository;
 
-    constructor(journeyRepository: FirebaseJourneyRepository) {
+    constructor(journeyRepository: JourneyRepository) {
         this.journeyRepository = journeyRepository;
     }
 

@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import { FirebaseJourneyRepository } from '@firebase/repository';
+import { JourneyRepository } from '../../domain/repositories/journey-repository';
 import { LoggerService } from '@services';
 import { Car, Group } from '../../domain/entities';
 import { DB_COLLECTION, HTTP_STATUS_CODE } from '@constants';
 
 export class InitializeController {
     private logger = LoggerService.getInstance();;
-    private journeyRepository: FirebaseJourneyRepository
+    private journeyRepository: JourneyRepository
 
-    constructor(journeyRepository: FirebaseJourneyRepository) {
+    constructor(journeyRepository: JourneyRepository) {
         this.journeyRepository = journeyRepository;
     }
 
@@ -29,7 +29,7 @@ export class InitializeController {
         }
     }
 
-    async generateCars(repository: FirebaseJourneyRepository, amount: number) {
+    async generateCars(repository: JourneyRepository, amount: number) {
         const startTime = performance.now();
         const carCollection: Car[] = []
         for (let i = 1; i <= amount; i++) {
@@ -55,7 +55,7 @@ export class InitializeController {
         }
     }
 
-    async generateGroups(repository: FirebaseJourneyRepository, amount: number) {
+    async generateGroups(repository: JourneyRepository, amount: number) {
         const startTime = performance.now();
         const groupCollection: Group[] = []
         for (let i = 1; i <= amount; i++) {

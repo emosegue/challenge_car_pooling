@@ -62,6 +62,14 @@ Before running the application, make sure you have the following installed:
 For the purposes of the challenge, the relevant information to be able to connect to Firebase is in the .env file so it is not necessary to do anything.
 In a real environment, this file would not only not be uploaded, but we would have to supply this need with a secrets service such as Google or AWS Secrets Manager.
 
+The only practical consideration is to configure the app to run in a cloud or local environment. This can be done by changing the flag
+
+```node
+   STORAGE_MODE=localhost | cloud
+```
+
+Por defecto se encuentra en localhost.
+
 4. Run the application
 
 ```node
@@ -86,7 +94,11 @@ It is assumed that in this application we will perform the assignment *synchrono
 
 **Database**
 
-Consider to the scope of the challenge, it is important to have a cloud information repository to avoid recruiters having to install a local db or deal with configurations, docker images, etc. For this reason, I chose to use Firebase with Google Authentication and generate three collections: cars, journeys and group. All necessary environment data to run the application is located on .env file. This implementation is not correct in a real environment, the correct thing would be to use some secrets service, but given the scope of the challenge I considered that it was the most practical way. Aditionally, an interface was used to allow another repository to be easily implemented if required.
+I thought it was appropriate to propose both a cloud-based approach and a local approach to the challenge. Both are functional, except that the limitation of the cloud approach is the response time and the cost. Currently, Firebase has a usage quota that, with a load of tests, can be quite expensive.
+Both approaches have an in-memory cache storage to speed up operations. It should be noted that due to time constraints, the cloud approach was prioritized, which is why localDB is not implemented.
+
+
+![](./docs/repository.png)
 
 **Cache**
 
@@ -168,7 +180,6 @@ Start manually the process of associate car with a group and store the result in
 Responses:
 
 - **200 OK** When the process was finished successfully
-
 - **500 Bad Request** When there is a failure in the request format, expected
   headers, or the payload can't be unmarshalled.
 
