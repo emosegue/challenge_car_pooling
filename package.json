@@ -7,7 +7,8 @@
     "test": "jest --coverage",
     "lint": "eslint -c eslint.config.js",
     "debug": "nodemon --inspect ./build/src/index.js",
-    "start": "webpack",
+    "build": "webpack",
+    "start": "npm run build",
     "run-dev": "nodemon ./build/src/index.js"
   },
   "repository": {
