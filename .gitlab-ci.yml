@@ -3,10 +3,7 @@ stages:
   - build
   - docker
   - acceptance
-
-variables:
-  NODE_ENV: 'production'
-
+  
 build:
   stage: build
   image: node:20-alpine
@@ -32,8 +29,8 @@ build_image:
     - docker push ${CI_REGISTRY_IMAGE}:latest
 
 acceptance:
-  stage: acceptance
   image: cabify/challenge:latest
+  stage: acceptance
   only: 
     - master
   dependencies: []
