@@ -7,6 +7,6 @@ RUN apk --no-cache add ca-certificates libc6-compat
 
 EXPOSE 9091
 
-COPY car-pooling-challenge /
+COPY car-pooling-challenge-candidate-Dc1YWM0NTF /
 
 ENTRYPOINT [ "/car-pooling-challenge-candidate-Dc1YWM0NTF"]
