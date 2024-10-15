@@ -318,15 +318,3 @@ Gitlab.
 - Document your decisions using MRs or in this very README adding sections to it,
   the same way you would be generating documentation for any other deliverable.
   We want to see how you operate in a quasi real work environment.
-
-## Feedback
-
-In Cabify, we really appreciate your interest and your time. We are highly
-interested on improving our Challenge and the way we evaluate our candidates.
-Hence, we would like to beg five more minutes of your time to fill the
-following survey:
-
-- https://forms.gle/EzPeURspTCLG1q9T7
-  ✅ _Form answered as emanuelmosegue@gmail.com_
-
-Your participation is really important. Thanks for your contribution!
